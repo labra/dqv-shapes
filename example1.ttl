@@ -1,0 +1,78 @@
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix vann:    <http://purl.org/vocab/vann/> .
+@prefix foaf:    <http://xmlns.com/foaf/0.1/> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix qb:      <http://purl.org/linked-data/cube#> .
+@prefix daq:     <http://purl.org/eis/vocab/daq#> .
+@prefix voaf:    <http://purl.org/vocommons/voaf#> .
+@prefix oa:      <http://www.w3.org/ns/oa#> .
+@prefix duv:     <http://www.w3.org/ns/duv#> .
+@prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
+@prefix dqv:     <http://www.w3.org/ns/dqv#> .
+@prefix :        <http://example.com/> .
+@prefix dcat:    <http://www.w3.org/ns/dcat#> .
+
+:myDataset 
+    a dcat:Dataset ;
+    dcterms:title "My dataset" ; 
+    dcat:distribution :myDatasetDistribution
+    .
+
+:myDatasetDistribution
+    a dcat:Distribution ;
+    dcat:downloadURL <http://www.example.org/files/mydataset.csv> ;
+    dcterms:title "CSV distribution of dataset" ;
+    dcat:mediaType "text/csv" ;
+    dcat:byteSize "87120"^^xsd:decimal 
+	.
+
+:myDatasetDistribution
+    dqv:hasQualityMeasurement :measurement1, :measurement2
+    .
+
+:measurement1 
+    a dqv:QualityMeasurement ;
+    dqv:computedOn :myDatasetDistribution ;
+    dqv:isMeasurementOf :downloadURLAvailabilityMetric ;
+    dqv:value "true"^^xsd:boolean 
+    .
+
+:measurement2
+    a dqv:QualityMeasurement ;
+    dqv:computedOn :myDatasetDistribution ;
+    dqv:isMeasurementOf :csvCompletenessMetric ;
+    dqv:value "0.5"^^xsd:double 
+    .
+
+#definition of dimensions and metrics
+:availability
+    a dqv:Dimension ;
+    skos:prefLabel "Availability"@en ;
+    skos:definition "Availability of a dataset is the extent to which data (or some portion of it) is present, obtainable and ready for use."@en ; 
+    dqv:inCategory :accessibility
+    .
+
+:completeness
+    a dqv:Dimension ;
+    skos:prefLabel "Completeness"@en ;
+    skos:definition "Completeness refers to the degree to which all required information is present in a particular dataset."@en ;
+    dqv:inCategory :intrinsicDimensions
+    .
+
+
+:downloadURLAvailabilityMetric 
+    a dqv:Metric ;
+    skos:definition "It checks if dcat:downloadURL  is available and  if its value is dereferenceable."@en ;
+    dqv:expectedDataType xsd:boolean ;
+    dqv:inDimension :availability
+    .
+
+:csvCompletenessMetric
+    a dqv:Metric ; 	
+    skos:definition "Ratio between the number of objects represented in the csv and the number of  objects expected to be represented according to the declared dataset scope."@en ;
+    dqv:expectedDataType xsd:double ;
+    dqv:inDimension :completeness
+    .	

@@ -1,0 +1,87 @@
+prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> 
+prefix owl:     <http://www.w3.org/2002/07/owl#> 
+prefix dcterms: <http://purl.org/dc/terms/> 
+prefix xsd:     <http://www.w3.org/2001/XMLSchema#> 
+prefix vann:    <http://purl.org/vocab/vann/> 
+prefix foaf:    <http://xmlns.com/foaf/0.1/> 
+prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> 
+prefix qb:      <http://purl.org/linked-data/cube#> 
+prefix daq:     <http://purl.org/eis/vocab/daq#> 
+prefix voaf:    <http://purl.org/vocommons/voaf#> 
+prefix oa:      <http://www.w3.org/ns/oa#> 
+prefix duv:     <http://www.w3.org/ns/duv#> 
+prefix skos:    <http://www.w3.org/2004/02/skos/core#> 
+prefix dqv:     <http://www.w3.org/ns/dqv#> 
+prefix dcat:    <http://www.w3.org/ns/dcat#> 
+
+<QualityMeasurement> EXTRA a {
+  a [ dqv:QualityMeasurement ]? ;
+  a [ qb:Observation ] ? ;
+  dqv:computedOn @<Dataset> OR @<DatasetDistribution> ;
+  dqv:isMeasurementOf @<Metric> ;
+  dqv:value xsd:boolean OR 
+            xsd:double   # extend with other datatypes ?
+}
+
+<Metric> EXTRA a {
+ a [ dqv:Metric ]? ;
+ skos:definition xsd:string OR rdf:langString ?;
+ dqv:inDimension @<Dimension> ;
+ dqv:expectedDataType [ xsd:boolean xsd:double ]
+}
+
+<Dimension> EXTRA a {
+ a [ dqv:Dimension ]? ;
+ skos:prefLabel xsd:string OR rdf:langString ? ;
+ skos:definition xsd:string OR rdf:langString ? ;
+ dqv:inCategory @<Category> 
+}
+
+<Category> EXTRA a {
+ a [ dqv:Category ]?
+}
+
+<QualityMeasurementDataset> EXTRA a {
+ a [ dqv:QualityMeasurementDataset ]? ;
+}
+
+<QualityPolicy> EXTRA a {
+ a [ dqv:QualityPolicy ] ;
+ 
+}
+
+<QualityAnnotation> EXTRA a {
+ a [ dqv:QualityAnnotation ]? ;
+}
+<QualityCertificate> EXTRA a {
+ a [ dqv:QualityCertificate ]?
+}
+
+<UserQualityFeedback> EXTRA a {
+ a [dqv:UserQualityFeedback ]
+}
+
+<QualityMetadata> EXTRA a {
+ a [ dqv:QualityMetadata ] ;
+}
+
+<Observation> EXTRA a {
+ a [ qb:Observation ]? ;
+ dqv:isMeasurementOf @<Metric>
+}
+
+<Dataset> {
+ a [ dcat:Dataset ] ;
+ dcterms:title xsd:string ;
+ dqv:hasQualityMeasurement @<QualityMeasurement> * ;
+ dcat:distribution @<DatasetDistribution> ;
+}
+
+<DatasetDistribution> {
+ a [ dcat:Distribution ] ;
+ dcat:downloadURL IRI ? ;
+ dcterms:title xsd:string ?;
+ dcat:mediaType xsd:string ;
+ dcat:byteSize xsd:decimal ;
+ dqv:hasQualityMeasurement @<QualityMeasurement>* ;
+}

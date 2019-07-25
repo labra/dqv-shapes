@@ -1,0 +1,1 @@
+shaclex --data example1.ttl --schema dqv.shex --trigger shapemap --shapeMap example1.shapemap --schemaFormat shexc --engine shex
