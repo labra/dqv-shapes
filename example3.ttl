@@ -6,6 +6,7 @@
 @prefix foaf:    <http://xmlns.com/foaf/0.1/> .
 @prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix qb:      <http://purl.org/linked-data/cube#> .
+@prefix prov:    <http://www.w3.org/ns/prov#> .
 @prefix daq:     <http://purl.org/eis/vocab/daq#> .
 @prefix voaf:    <http://purl.org/vocommons/voaf#> .
 @prefix oa:      <http://www.w3.org/ns/oa#> .
@@ -77,4 +78,32 @@
     dqv:inDimension :completeness
     .	
 	
+## Metadata	
+	
+:myQualityMetadata 
+    a dqv:QualityMetadata ;
+    prov:wasAttributedTo :myQualityChecker ;
+    prov:generatedAtTime "2015-05-27T02:52:02Z"^^xsd:dateTime ;
+    prov:wasGeneratedBy :myQualityChecking .
+
+# :myQualityChecker is a service computing some quality metrics 	
+
+:myQualityChecker
+    a prov:SoftwareAgent ;   
+    rdfs:label "A quality assessment service"^^xsd:string .
+    # Further details about quality service/software can be provided, for example,
+    # deploying  vocabularies such as Dataset Usage Vocabulary (DUV), Dublin Core or ADMS.SW
+
+# :myQualityChecking is the activity that has generated :myQualityMetadata from 
+# :myDatasetDistribution
+
+:myQualityChecking
+    a prov:Activity;
+    rdfs:label "The checking of myDatasetDistribution's quality"^^xsd:string;
+    prov:wasAssociatedWith :myQualityChecker;
+    prov:used              :myDatasetDistribution;
+    prov:generated         :myQualityMetadata;
+    prov:endedAtTime      "2015-05-27T02:52:02Z"^^xsd:dateTime;
+    prov:startedAtTime     "2015-05-27T00:52:02Z"^^xsd:dateTime
+    .
 	

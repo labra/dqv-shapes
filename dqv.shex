@@ -6,6 +6,7 @@ prefix vann:    <http://purl.org/vocab/vann/>
 prefix foaf:    <http://xmlns.com/foaf/0.1/> 
 prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> 
 prefix qb:      <http://purl.org/linked-data/cube#> 
+prefix prov:    <http://www.w3.org/ns/prov#>
 prefix daq:     <http://purl.org/eis/vocab/daq#> 
 prefix voaf:    <http://purl.org/vocommons/voaf#> 
 prefix oa:      <http://www.w3.org/ns/oa#> 
@@ -58,11 +59,30 @@ prefix dcat:    <http://www.w3.org/ns/dcat#>
 }
 
 <UserQualityFeedback> EXTRA a {
- a [dqv:UserQualityFeedback ]
+ a [dqv:UserQualityFeedback ]?
 }
 
 <QualityMetadata> EXTRA a {
- a [ dqv:QualityMetadata ] ;
+ a [ dqv:QualityMetadata ]? ;
+ prov:wasAttributedTo @<SoftwareAgent>* ;
+ prov:generatedAtTime xsd:dateTime ? ;
+ prov:wasGeneratedBy @<Activity>* ; 
+}
+
+# Shapes from other namespaces
+
+<SoftwareAgent> EXTRA a {
+ a [ prov:SoftwareAgent ]? 
+}
+
+<Activity> EXTRA a {
+ a [ prov:Activity ]? ;
+ rdfs:label xsd:string OR rdf:langString *;
+ prov:wasAssociatedWith @<SoftwareAgent> * ;
+ prov:used @<Dataset> OR @<DatasetDistribution> ? ;
+ prov:generated @<QualityMetadata> ? ;
+ prov:startedAtTime @xsd:dateTime ? ;
+ prov:endedAtTime @xsd:dateTime ? ;
 }
 
 <Observation> EXTRA a {
